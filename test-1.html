@@ -43,7 +43,14 @@
     <my_label v-for="item in items" v-bind:item_value="item"></my_label>
 </div>
 
+<div id="app-8">
+    <div>{{info.author}}}</div>
+    <div>{{info.name}}}</div>
+    <a v-bind:href="info.img">img</a>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
     var app = new Vue({
@@ -102,6 +109,21 @@
         el: "#app-7",
         data: {
             items: ['Java', 'Kotlin', 'Go']
+        }
+    })
+
+    var app8 = new Vue({
+        el: "#app-8",
+        data: function () {
+            return {
+                info: {}
+            }
+        },
+        mounted: function () {
+            axios.get("data.json").then(response => {
+                console.log(response.data)
+                this.info = response.data
+            })
         }
     })
 </script>
