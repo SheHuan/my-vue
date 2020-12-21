@@ -39,7 +39,12 @@
     <input v-model="message"/>
 </div>
 
+<div id="app-7">
+    <my_label v-for="item in items" v-bind:item_value="item"></my_label>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+
 <script>
     var app = new Vue({
         el: "#app",
@@ -85,6 +90,18 @@
         el: '#app-6',
         data: {
             message: 'hello vue'
+        }
+    })
+
+    Vue.component("my_label", {
+        props: ['item_value'],
+        template: '<li>{{item_value}}</li>'
+    })
+
+    var app7 = new Vue({
+        el: "#app-7",
+        data: {
+            items: ['Java', 'Kotlin', 'Go']
         }
     })
 </script>
