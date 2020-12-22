@@ -59,8 +59,17 @@
     <p>Using v-html directive: <span v-html="rawHtml"></span></p>
 </div>
 
+<div id="watch-example">
+    <p>
+        Ask a yes/no question:
+        <input v-model="question">
+    </p>
+    <p>{{ answer }}</p>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
 
 <script>
     let app = new Vue({
@@ -96,6 +105,7 @@
         data: {
             message: 'hello vue'
         },
+        // 计算属性
         computed: {
             reversedMessage: function () {
                 return this.message.split('').reverse().join('');
@@ -144,6 +154,44 @@
         el: '#app-9',
         data: {
             rawHtml: '<span style="color:red">hello vue</span>'
+        }
+    })
+
+    let watchExampleVM = new Vue({
+        el: '#watch-example',
+        data: {
+            question: '',
+            answer: 'I cannot give you an answer until you ask a question!'
+        },
+        // 监听属性，监听文本框输入
+        watch: {
+            question: function () {
+                this.answer = 'Waiting for you to stop typing...';
+                this.debouncedGetAnswer()
+            }
+        },
+        created: function () {
+            // _.debounce 是一个通过 Lodash 限制操作频率的函数。
+            // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+            this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+        },
+        methods: {
+            getAnswer: function () {
+                if (this.question.indexOf('?') === -1) {
+                    this.answer = 'Questions usually contain a question mark. ;-)';
+                    return;
+                }
+                this.answer = 'Thinking...';
+                var vm = this;
+                axios.get('https://yesno.wtf/api')
+                    .then(response => {
+                        // _.capitalize 会将字符串首字母大写
+                        vm.answer = _.capitalize(response.data.answer)
+                    })
+                    .catch(error => {
+                        vm.answer = 'Error! Could not reach the API. ' + error
+                    })
+            }
         }
     })
 </script>
