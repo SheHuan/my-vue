@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="div1" v-bind:class="{active: isActive, 'text-danger': hasError}">div1</div>
+<div id="div2" v-bind:class="classObject">div2</div>
+<div id="div3" v-bind:class="[activeClass, errorClass]">div3</div>
+<div id="div4" v-bind:class="[{active: isActive}, errorClass]">div4</div>
+<div id="div5">
+    <my-label class="bbb ccc" v-bind:class="{active: isActive}"></my-label>
+</div>
+<div id="div6" v-bind:class="classObject">div6</div>
+
+<div id="div7" v-bind:style="{color: activeColor, fontSize: fontSize}">div7</div>
+<div id="div8" v-bind:style="styleObject">div8</div>
+<div id="div9" v-bind:style="[colorClass, fontSizeClass]">div9</div>
+<div id="div10" v-bind:style="[{color: activeColor}, fontSizeClass]">div10</div>
+<div id="div11" v-bind:style="styleObject">div11</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+<script>
+    let vm1 = new Vue({
+        el: '#div1',
+        data: {
+            isActive: true,
+            hasError: false
+        }
+    })
+
+    let vm2 = new Vue({
+        el: '#div2',
+        data: {
+            classObject: {
+                active: true,
+                'text-danger': false
+            }
+        }
+    })
+
+    let vm3 = new Vue({
+        el: '#div3',
+        data: {
+            activeClass: 'active',
+            errorClass: 'text-danger'
+        }
+    })
+
+    let vm4 = new Vue({
+        el: '#div4',
+        data: {
+            isActive: true,
+            errorClass: 'text-danger'
+        }
+    })
+
+    Vue.component('my-label', {
+        template: '<p class="aaa bbb"><span>div5</span></p>'
+    })
+
+    let vm5 = new Vue({
+        el: '#div5',
+        data: {
+            isActive: true
+        }
+    })
+
+    let vm6 = new Vue({
+        el: '#div6',
+        data: {
+            isActive: true,
+            hasError: false
+        },
+        computed: {
+            classObject: function () {
+                return {
+                    active: this.isActive && !this.hasError,
+                    'text-danger': this.hasError && this.error.type === 'fatal'
+                }
+            }
+        }
+    })
+
+    let vm7 = new Vue({
+        el: '#div7',
+        data: {
+            activeColor: 'red',
+            fontSize: '24px'
+        }
+    })
+
+    let vm8 = new Vue({
+        el: '#div8',
+        data: {
+            styleObject: {
+                color: 'green',
+                fontSize: '24px'
+            }
+        }
+    })
+
+    let vm9 = new Vue({
+        el: '#div9',
+        data: {
+            colorClass: {
+                color: 'blue'
+            },
+            fontSizeClass: {
+                fontSize: '24px'
+            }
+        }
+    })
+
+    let vm10 = new Vue({
+        el: '#div10',
+        data: {
+            activeColor: 'red',
+            fontSizeClass: {
+                fontSize: '24px'
+            }
+        }
+    })
+
+    let vm11 = new Vue({
+        el: '#div11',
+        data: {
+            num: 2
+        },
+        computed: {
+            styleObject: function () {
+                return {
+                    color: this.num % 2 === 0 ? 'green' : 'blue',
+                    fontSize: '24px'
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
