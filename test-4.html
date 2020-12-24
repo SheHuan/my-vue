@@ -11,6 +11,9 @@
         <input v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat">
         <button>Add</button>
     </form>
+
+    <component-a v-bind:title="lastTodoText"></component-a>
+
     <ul>
         <li
                 is="todo-item"
@@ -24,15 +27,23 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 <script>
+    // 全局注册组件
     Vue.component('todo-item', {
         props: ['title'],
         template: '<li>{{ title }} <button v-on:click="$emit(\'remove\')">Remove</button></li>'
     })
 
+    // 局部注册组件
+    let ComponentA = {
+        props: ['title'],
+        template: "<span>last todo: {{ title }}</span>"
+    }
+
     new Vue({
         el: '#todo-list-example',
         data: {
             newTodoText: '',
+            lastTodoText: '',
             todos: [
                 {
                     id: 1,
@@ -51,12 +62,19 @@
         },
         methods: {
             addNewTodo: function () {
+                if (!this.newTodoText) {
+                    return;
+                }
                 this.todos.push({
                     id: this.nextTodoId++,
                     title: this.newTodoText
                 });
+                this.lastTodoText = this.newTodoText;
                 this.newTodoText = '';
             }
+        },
+        components: {
+            'component-a': ComponentA
         }
     })
 </script>
