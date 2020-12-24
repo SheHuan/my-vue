@@ -9,6 +9,18 @@
 <div id="component-example">
     <button-counter></button-counter>
     <button-counter></button-counter>
+
+    <hr>
+    <div v-bind:style="{fontSize: postFontSize + 'em'}">
+        <!-- v-on:enlarge-text 是自定义事件 -->
+        <blog-post
+                v-for="post in posts"
+                v-bind:post="post"
+                v-bind:key="post.id"
+                v-on:enlarge-text="postFontSize += 0.1"
+                v-on:narrow-text="postFontSize -= 0.1"
+        ></blog-post>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
@@ -23,8 +35,34 @@
         template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
     }
 
+    // 使用 $emit 方法并传入事件名称来触发一个事件
+    Vue.component('blog-post', {
+        props: ['post'],
+        template: `
+            <div>
+                <h3>{{post.title}}</h3>
+                <button v-on:click="$emit('enlarge-text')">Enlarge text</button>
+                <button v-on:click="$emit('narrow-text')">Narrow text</button>
+                <div v-html="post.content"></div>
+            </div>
+        `
+    })
+
     new Vue({
         el: '#component-example',
+        data: {
+            posts: [
+                {id: 1, title: 'My journey with Vue'},
+                {id: 2, title: 'Blogging with Vue'},
+                {id: 3, title: 'Why Vue is so fun'}
+            ],
+            postFontSize: 1
+        },
+        methods: {
+            enlargeText: function f() {
+                this.postFontSize += 0.1;
+            }
+        },
         components: {
             'button-counter': ButtonCounter
         }
