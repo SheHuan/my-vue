@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="component-example">
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+<script>
+    let ButtonCounter = {
+        // 组件内部定义的data需要通过函数返回
+        data: function () {
+            return {
+                count: 0
+            }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    }
+
+    new Vue({
+        el: '#component-example',
+        components: {
+            'button-counter': ButtonCounter
+        }
+    })
+</script>
+</body>
+</html>
