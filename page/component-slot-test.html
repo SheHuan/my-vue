@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="slot-example">
+    <alert-box>
+        Something bad happened.
+    </alert-box>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+<script>
+    Vue.component('alert-box', {
+        template: `
+            <div>
+                <strong>Error!</strong>
+                <slot></slot>
+            </div>`
+    })
+
+    new Vue({
+        el: '#slot-example'
+    })
+
+</script>
+</body>
+</html>
