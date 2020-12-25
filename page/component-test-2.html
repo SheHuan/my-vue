@@ -11,6 +11,7 @@
     <button-counter></button-counter>
 
     <hr>
+
     <div v-bind:style="{fontSize: postFontSize + 'em'}">
         <!-- v-on:enlarge-text 是自定义事件 -->
         <blog-post
@@ -18,9 +19,21 @@
                 v-bind:post="post"
                 v-bind:key="post.id"
                 v-on:enlarge-text="postFontSize += 0.1"
-                v-on:narrow-text="postFontSize -= 0.1"
+                v-on:narrow-text="postFontSize -= $event"
+                v-on:narrow-text2="narrowText2"
         ></blog-post>
     </div>
+
+    <hr>
+
+    <div>searchText: {{searchText}}</div>
+    <input v-bind:value="searchText" v-on:input="searchText = $event.target.value">
+
+    <hr>
+
+    <div>searchText2: {{searchText2}}</div>
+    <input v-bind:value="searchText2" v-on:input="searchText2 = $event.target.value">
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
@@ -35,16 +48,31 @@
         template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
     }
 
-    // 使用 $emit 方法并传入事件名称来触发一个事件
+    // 使用 $emit 方法并传入事件名称来触发一个事件,
+    // 例如触发 narrow-text 方法，0.1会作为参数，可以使用 $event 接收
+    // 触发 narrowText2 方法时，0.1会直接被 narrowText2 方法接收
     Vue.component('blog-post', {
         props: ['post'],
         template: `
             <div>
                 <h3>{{post.title}}</h3>
                 <button v-on:click="$emit('enlarge-text')">Enlarge text</button>
-                <button v-on:click="$emit('narrow-text')">Narrow text</button>
+                <button v-on:click="$emit('narrow-text', 0.1)">Narrow text</button>
+                <button v-on:click="$emit('narrow-text2', 0.1)">Narrow text2</button>
                 <div v-html="post.content"></div>
             </div>
+        `
+    })
+
+    // 在自定义组件上使用 v-model，为了让它正常工作，这个组件内的 <input> 必须：
+    // 将其 value 特性绑定到一个名叫 value 的 prop 上
+    // 在其 input 事件被触发时，将新的值通过自定义的 input 事件抛出，$event.target.value 就是输入的内容
+    Vue.component('custom-input', {
+        props: ['value'],
+        template: `
+            <input
+                    v-bind:value="value"
+                    v-on:input="$emit('input', $event.target.value)">
         `
     })
 
@@ -56,11 +84,13 @@
                 {id: 2, title: 'Blogging with Vue'},
                 {id: 3, title: 'Why Vue is so fun'}
             ],
-            postFontSize: 1
+            postFontSize: 1,
+            searchText: '',
+            searchText2: ''
         },
         methods: {
-            enlargeText: function f() {
-                this.postFontSize += 0.1;
+            narrowText2: function (narrowAmount) {
+                this.postFontSize -= narrowAmount;
             }
         },
         components: {
