@@ -109,6 +109,11 @@
                 selectedPost: null
             }
         },
+        methods: {
+            clickBlog: function (post) {
+                this.selectedPost = post;
+            }
+        },
         template: `
             <div class="posts-tab">
                 <ul class="posts-sidebar">
@@ -116,7 +121,7 @@
                             v-for="post in posts"
                             v-bind:key="post.id"
                             v-bind:class="{ selected: post === selectedPost }"
-                            v-on:click="selectedPost = post"
+                            v-on:click="clickBlog(post)"
                     >
                         {{ post.title }}
                     </li>
