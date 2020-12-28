@@ -15,12 +15,12 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 <script>
     Vue.component('todo-list', {
-        template: '<div>\
-                        <slot name="todo-title"></slot>\
-                        <ul>\
-                            <slot name="todo-items"></slot>\
-                        </ul>\
-                   </div>'
+        template: `<div>
+                        <slot name="todo-title"></slot>
+                        <ul>
+                            <slot name="todo-items"></slot>
+                        </ul>
+                   </div>`
     })
 
     Vue.component('todo-title', {

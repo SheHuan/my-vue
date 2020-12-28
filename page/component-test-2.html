@@ -16,7 +16,7 @@
         <!-- v-on:enlarge-text 是自定义事件 -->
         <blog-post
                 v-for="post in posts"
-                v-bind:post="post"
+                v-bind:post-detail="post"
                 v-bind:key="post.id"
                 v-on:enlarge-text="postFontSize += 0.1"
                 v-on:narrow-text="postFontSize -= $event"
@@ -52,14 +52,14 @@
     // 例如触发 narrow-text 方法，0.1会作为参数，可以使用 $event 接收
     // 触发 narrowText2 方法时，0.1会直接被 narrowText2 方法接收
     Vue.component('blog-post', {
-        props: ['post'],
+        props: ['postDetail'],
         template: `
             <div>
-                <h3>{{post.title}}</h3>
+                <h3>{{postDetail.title}}</h3>
                 <button v-on:click="$emit('enlarge-text')">Enlarge text</button>
                 <button v-on:click="$emit('narrow-text', 0.1)">Narrow text</button>
                 <button v-on:click="$emit('narrow-text2', 0.1)">Narrow text2</button>
-                <div v-html="post.content"></div>
+                <div v-html="postDetail.content"></div>
             </div>
         `
     })

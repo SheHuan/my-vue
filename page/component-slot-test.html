@@ -6,9 +6,39 @@
 </head>
 <body>
 <div id="slot-example">
-    <alert-box>
-        Something bad happened.
-    </alert-box>
+    <alert-box></alert-box>
+
+    <hr>
+
+    <alert-box>Please try again later.</alert-box>
+
+    <hr>
+
+    <base-layout>
+        <template v-slot:header>
+            <h1>Here might be a page title</h1>
+        </template>
+
+        <!--
+            这个是默认插槽的内容，也可以这样指定：
+            <template v-slot:header>......</template>
+        -->
+        <p>A paragraph for the main content...</p>
+
+        <!-- v-slot: 可以缩写为 # -->
+        <template #footer>
+            <p>Here's some contact info</p>
+        </template>
+    </base-layout>
+
+    <hr>
+
+    <current-user>
+        <!--定义包含所有插槽prop的对象 slotProps-->
+        <template v-slot:default="slotProps">
+            {{slotProps.user.firstName}}
+        </template>
+    </current-user>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
@@ -17,12 +47,52 @@
         template: `
             <div>
                 <strong>Error!</strong>
-                <slot></slot>
+                <!--// 设置插槽的默认内容-->
+                <slot>Something bad happened.</slot>
             </div>`
     })
 
+    // 插槽的默认名字为：default
+    Vue.component('base-layout', {
+        props: [''],
+        template: `
+            <div>
+                <header>
+                    <slot name="header"></slot>
+                </header>
+                <main>
+                    <slot></slot>
+                </main>
+                <footer>
+                    <slot name="footer"></slot>
+                </footer>
+            </div>
+        `
+    })
+
+    // 作用域插槽，让插槽内容能够访问子组件中的数据
+    // 为了让 user 在父级的插槽内容中可用，我们可以将 user 作为 <slot> 元素的一个特性绑定上去
+    // 绑定在 <slot> 元素上的特性被称为插槽prop，即v-bind:后的第一个user
+    Vue.component('current-user', {
+        data: function () {
+            return {
+                user: {
+                    firstName: 'tang',
+                    lastName: 'san'
+                }
+            }
+        },
+        template: `
+            <span>
+                <slot v-bind:user="user">
+                    {{user.lastName}}
+                </slot>
+            </span>
+        `
+    })
+
     new Vue({
-        el: '#slot-example'
+        el: '#slot-example',
     })
 
 </script>
