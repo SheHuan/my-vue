@@ -39,6 +39,10 @@
             {{slotProps.user.firstName}}
         </template>
     </current-user>
+
+    <current-user v-slot:default="slotProps">
+        {{slotProps.user.firstName}}
+    </current-user>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>

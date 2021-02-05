@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id='app'>
+    <todo-list>
+        <template v-slot:todo-title>
+            <todo-title v-bind:title="title"></todo-title>
+        </template>
+        <template v-slot:todo-items>
+            <todo-items v-bind:item="item" v-for="item in items"></todo-items>
+        </template>
+    </todo-list>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+<script>
+    Vue.component('todo-list', {
+        template: `<div>
+                        <slot name="todo-title"></slot>
+                        <ul>
+                            <slot name="todo-items"></slot>
+                        </ul>
+                   </div>`
+    })
+
+    Vue.component('todo-title', {
+        props: ['title'],
+        template: '<div>{{title}}</div>'
+    })
+
+    Vue.component('todo-items', {
+        props: ['item'],
+        template: '<li>{{item}}</li>'
+    })
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            title: '奇妙清单',
+            items: ['冬至吃饺子', '做早餐', '追剧']
+        }
+    })
+</script>
+</body>
+</html>
